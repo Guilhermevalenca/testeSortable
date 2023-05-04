@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- importando a biblioteca do Sortable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
+    <title>Document</title>
+    <style>
+        #origem{
+            border-style: solid;
+            display: grid;
+        }
+        .destino{
+            border-style: solid;
+            display: flex;
+            width: 8em;
+            height: 2em;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="origem">
+        <label>
+            Portugues
+            <input type="hidden" name="materia[]" value="Portugues">
+            <input type="hidden" name="linha[]">
+            <input type="hidden" name="coluna[]">
+        </label>
+        <label>
+            Matematica
+            <input type="hidden" name="materia[]" value="Matematica">
+            <input type="hidden" name="linha[]">
+            <input type="hidden" name="coluna[]">
+        </label>
+        <label>
+            Fisica
+            <input type="hidden" name="materia[]" value="Fisica">
+            <input type="hidden" name="linha[]">
+            <input type="hidden" name="coluna[]">
+        </label>
+    </div>
+    <br>
+    <form action="imprimir.php" method="GET">
+    <table>
+        <thead>
+            <tr>
+              <th></th>
+              <th>Domingo</th>
+              <th>Segunda</th>
+              <th>Terça</th>
+              <th>Quarta</th>
+              <th>Quinta</th>
+              <th>Sexta</th>
+              <th>Sabado</th>
+            </tr>
+          </thead>
+        <tbody>
+            <tr>
+                <th>08:00</th>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+            </tr>
+            <tr>
+                <td>09:00</td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+            </tr>
+            <tr>
+                <td>10:00</td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+            </tr>
+        </tbody>
+    </table>
+    <button>envia</button>
+    </form>
+    <script>
+        origem = document.getElementById('origem');
+        destino = document.querySelectorAll('.destino');
+        linha = document.querySelectorAll('input[name="linha[]"]');
+        coluna = document.querySelectorAll('input[name="coluna[]"]');
+
+        new Sortable(origem, {
+            group: 'shared',
+            animation: 150
+        })
+        for(let i = 0; i < destino.length; i++){
+            new Sortable(destino[i], {
+                group: 'shared',
+                animation: 150
+            })
+            destino[i].addEventListener('drop', (event) => {
+                event.preventDefault();
+                event.target.appendChild(event.item);
+
+                const tableLinha = event.target.parentNode.cellIndex - 1;
+                linha[i].value = tableLinha;
+
+                const tableColuna = (event.target.parentNode.parentNode).rowIndex - 1;
+                coluna[i].value = tableColuna;
+            })
+        };
+    </script>
+</body>
+</html>
