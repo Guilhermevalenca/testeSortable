@@ -11,11 +11,9 @@
     <style>
         #origem{
             border-style: solid;
-            display: grid;
         }
         .destino{
             border-style: solid;
-            display: flex;
             width: 8em;
             height: 2em;
         }
@@ -27,24 +25,24 @@
         <label>
             Portugues
             <input type="hidden" name="materia[]" value="Portugues">
-            <input type="hidden" name="linha[]">
-            <input type="hidden" name="coluna[]">
+            <input class="linha" type="hidden" name="linha[]">
+            <input class="coluna" type="hidden" name="coluna[]">
         </label>
         <label>
             Matematica
             <input type="hidden" name="materia[]" value="Matematica">
-            <input type="hidden" name="linha[]">
-            <input type="hidden" name="coluna[]">
+            <input class="linha" type="hidden" name="linha[]">
+            <input class="coluna" type="hidden" name="coluna[]">
         </label>
         <label>
             Fisica
             <input type="hidden" name="materia[]" value="Fisica">
-            <input type="hidden" name="linha[]">
-            <input type="hidden" name="coluna[]">
+            <input class="linha" type="hidden" name="linha[]">
+            <input class="coluna" type="hidden" name="coluna[]">
         </label>
     </div>
     <br>
-    <form action="imprimir.php" method="GET">
+    <form id="form" action="imprimir.php" method="POST">
     <table>
         <thead>
             <tr>
@@ -59,46 +57,46 @@
             </tr>
           </thead>
         <tbody>
-            <tr class="aqui">
+            <tr>
                 <th>08:00</th>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
             </tr>
-            <tr class="aqui">
+            <tr>
                 <td>09:00</td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
             </tr>
-            <tr class="aqui">
+            <tr>
                 <td>10:00</td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
-                <td><div class="destino"></div></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
+                <td class="destino"></td>
             </tr>
         </tbody>
     </table>
     <button>envia</button>
     </form>
 <script>
-origem = document.getElementById('origem');
-destino = document.querySelectorAll('.destino');
-linha = document.querySelectorAll('input[name="linha[]"]');
-coluna = document.querySelectorAll('input[name="coluna[]"]');
-aqui = document.querySelectorAll('.aqui');
+const origem = document.getElementById('origem');
+const destino = document.querySelectorAll('.destino');
+const linha = document.querySelectorAll('.linha');
+const coluna = document.querySelectorAll('.coluna');
+const form = document.querySelector('#form');
  
 new Sortable(origem, {
     group: 'shared',
@@ -133,27 +131,31 @@ destino.forEach(element => {
         group: 'shared',
         animation: 150
     })
-     
-    element.addEventListener('drop', (event) => {
-        //event.preventDefault();
-        //aqui deveria ser salva a linha e coluna que foi colocado um dos label de origem
-        const td = event.target.closest('td');
-        const row = td.parentNode.rowIndex;
-        const column = td.cellIndex;
-         
-        linha.forEach((input) => {
-            if (input.parentNode === event.item) {
-                input.value = row;
-            }
-        });
-         
-        coluna.forEach((input) => {
-            if (input.parentNode === event.item) {
-                input.value = column;
-            }
-        });    
-    })
 });
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let cont = 0;
+    //aqui deveria ser salva a linha e coluna que foi colocado um dos label de origem
+    
+    const td = event.target.closest('td');
+    const row = td.parentNode.rowIndex;
+    const column = td.cellIndex;
+    
+    linha.forEach((input) => {
+        if (input.parentNode === event.item) {
+            input.value = row;
+            cont++;
+        }
+    });
+    
+    coluna.forEach((input) => {
+        if (input.parentNode === event.item) {
+            input.value = column;
+            cont++;
+        }
+    });
+    console.log(cont);
+})
 </script>
 </body>
 </html>
