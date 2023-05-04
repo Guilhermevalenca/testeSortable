@@ -59,7 +59,7 @@
             </tr>
           </thead>
         <tbody>
-            <tr>
+            <tr class="aqui">
                 <th>08:00</th>
                 <td><div class="destino"></div></td>
                 <td><div class="destino"></div></td>
@@ -69,7 +69,7 @@
                 <td><div class="destino"></div></td>
                 <td><div class="destino"></div></td>
             </tr>
-            <tr>
+            <tr class="aqui">
                 <td>09:00</td>
                 <td><div class="destino"></div></td>
                 <td><div class="destino"></div></td>
@@ -79,7 +79,7 @@
                 <td><div class="destino"></div></td>
                 <td><div class="destino"></div></td>
             </tr>
-            <tr>
+            <tr class="aqui">
                 <td>10:00</td>
                 <td><div class="destino"></div></td>
                 <td><div class="destino"></div></td>
@@ -93,32 +93,67 @@
     </table>
     <button>envia</button>
     </form>
-    <script>
-        origem = document.getElementById('origem');
-        destino = document.querySelectorAll('.destino');
-        linha = document.querySelectorAll('input[name="linha[]"]');
-        coluna = document.querySelectorAll('input[name="coluna[]"]');
+<script>
+origem = document.getElementById('origem');
+destino = document.querySelectorAll('.destino');
+linha = document.querySelectorAll('input[name="linha[]"]');
+coluna = document.querySelectorAll('input[name="coluna[]"]');
+aqui = document.querySelectorAll('.aqui');
+ 
+new Sortable(origem, {
+    group: 'shared',
+    animation: 150
+})
+//teste horrivel:
+/*
+for(let i = 0; i < destino.length; i++){
+     
+    new Sortable(destino[i], {
+        group: 'shared',
+        animation: 150
+    })  
+    destino[i].addEventListener('drop', (event) => {
+        event.preventDefault();
+         
+        event.target.appendChild(destino[i]);
+        const tableLinha = event.target.parentNode.cellIndex - 1;
+        linha[i].value = tableLinha;
+         
+        const tableColuna = (event.target.parentNode.parentNode).rowIndex - 1;
+        coluna[i].value = tableColuna;
+         
+    })
+};
+*/
+//teste nao sei quem ta pior:
 
-        new Sortable(origem, {
-            group: 'shared',
-            animation: 150
-        })
-        for(let i = 0; i < destino.length; i++){
-            new Sortable(destino[i], {
-                group: 'shared',
-                animation: 150
-            })
-            destino[i].addEventListener('drop', (event) => {
-                event.preventDefault();
-                event.target.appendChild(event.item);
-
-                const tableLinha = event.target.parentNode.cellIndex - 1;
-                linha[i].value = tableLinha;
-
-                const tableColuna = (event.target.parentNode.parentNode).rowIndex - 1;
-                coluna[i].value = tableColuna;
-            })
-        };
-    </script>
+destino.forEach(element => {
+     
+    new Sortable(element, {
+        group: 'shared',
+        animation: 150
+    })
+     
+    element.addEventListener('drop', (event) => {
+        //event.preventDefault();
+        //aqui deveria ser salva a linha e coluna que foi colocado um dos label de origem
+        const td = event.target.closest('td');
+        const row = td.parentNode.rowIndex;
+        const column = td.cellIndex;
+         
+        linha.forEach((input) => {
+            if (input.parentNode === event.item) {
+                input.value = row;
+            }
+        });
+         
+        coluna.forEach((input) => {
+            if (input.parentNode === event.item) {
+                input.value = column;
+            }
+        });    
+    })
+});
+</script>
 </body>
 </html>
