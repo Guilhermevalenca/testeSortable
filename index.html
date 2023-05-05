@@ -11,9 +11,11 @@
     <style>
         #origem{
             border-style: solid;
+            display: grid;
         }
         .destino{
             border-style: solid;
+            display: grid;
             width: 8em;
             height: 2em;
         }
@@ -43,7 +45,7 @@
     </div>
     <br>
     <form id="form" action="imprimir.php" method="POST">
-    <table>
+    <table id="table">
         <thead>
             <tr>
               <th></th>
@@ -59,33 +61,33 @@
         <tbody>
             <tr>
                 <th>08:00</th>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
             </tr>
             <tr>
                 <td>09:00</td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
             </tr>
             <tr>
                 <td>10:00</td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
-                <td class="destino"></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
+                <td><div class="destino"></div></td>
             </tr>
         </tbody>
     </table>
@@ -94,67 +96,45 @@
 <script>
 const origem = document.getElementById('origem');
 const destino = document.querySelectorAll('.destino');
-const linha = document.querySelectorAll('.linha');
-const coluna = document.querySelectorAll('.coluna');
-const form = document.querySelector('#form');
  
 new Sortable(origem, {
     group: 'shared',
     animation: 150
 })
-//teste horrivel:
-/*
-for(let i = 0; i < destino.length; i++){
-     
-    new Sortable(destino[i], {
-        group: 'shared',
-        animation: 150
-    })  
-    destino[i].addEventListener('drop', (event) => {
-        event.preventDefault();
-         
-        event.target.appendChild(destino[i]);
-        const tableLinha = event.target.parentNode.cellIndex - 1;
-        linha[i].value = tableLinha;
-         
-        const tableColuna = (event.target.parentNode.parentNode).rowIndex - 1;
-        coluna[i].value = tableColuna;
-         
-    })
-};
-*/
-//teste nao sei quem ta pior:
 
 destino.forEach(element => {
-     
     new Sortable(element, {
         group: 'shared',
         animation: 150
     })
 });
+const form = document.querySelector('#form');
+const table = document.getElementById('table');
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    let cont = 0;
+    const linha = document.querySelectorAll('.linha');
+    const coluna = document.querySelectorAll('.coluna');
     //aqui deveria ser salva a linha e coluna que foi colocado um dos label de origem
-    
     const td = event.target.closest('td');
     const row = td.parentNode.rowIndex;
     const column = td.cellIndex;
-    
+    let verificar = []
     linha.forEach((input) => {
         if (input.parentNode === event.item) {
             input.value = row;
-            cont++;
+            verificar[0] = true;
         }
     });
     
     coluna.forEach((input) => {
         if (input.parentNode === event.item) {
             input.value = column;
-            cont++;
+            verificar[1] = true;
         }
     });
-    console.log(cont);
+    if(verificar[0] && verificar[1]){
+        form.submit();
+    }
 })
 </script>
 </body>
